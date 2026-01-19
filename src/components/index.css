@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+@layer components {
+
+    /* Container que faz o movimento */
+    .animate-scroll {
+        display: flex !important;
+        width: max-content;
+        gap: 1.5rem;
+        /* Equivalente ao gap-6 */
+        animation: scroll-loop 20s linear infinite;
+    }
+
+    /* Pausa ao interagir */
+    .animate-scroll:hover {
+        animation-play-state: paused;
+    }
+}
+
+@keyframes scroll-loop {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        /* Move exatamente metade da largura da div pai (os 4 itens originais) */
+        transform: translateX(-50%);
+    }
+}
+
+/* Ajuste fino para garantir que o header fixo não oculte conteúdo se necessário */
+:target {
+    scroll-margin-top: 100px;
+}

@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+    
+    --color-primary: #1A5B5E;
+   
+    --color-secondary: #49A6AB;
+   
+    --color-bege: #D1D1D1;
+    
+    --color-cleam: #B4CEDE;
+
+    --font-display: "Unbounded", sans-serif;
+    /* Para Títulos */
+    --font-tech: "Exo", sans-serif;
+    /* Para subtítulos e botões */
+}
+
+/* Configurações Globais */
+:root {
+    font-family: "Inter", system-ui, sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* Reset de Tipografia: Aplica Unbounded em todos os títulos automaticamente */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+/* Classe utilitária para a fonte Exo se precisar usar em parágrafos */
+.font-tech {
+    font-family: var(--font-tech);
+}
