@@ -1,18 +1,10 @@
+// Hero.tsx (corrigido – removido specialties)
+
 import React, { useState } from "react";
 import { Button } from "../common/Button";
 import heroBg from "../../assets/images/heroBg.jpg";
 
 export const Hero = () => {
-  const specialties = [
-    "Ortodontia",
-    "Invisalign",
-    "Clareamento",
-    "Coroa",
-    "Implantes",
-    "Odontopediatria",
-    "Próteses",
-  ];
-
   const [form, setForm] = useState({
     nome: "",
     telefone: "",
@@ -32,14 +24,14 @@ export const Hero = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setStatus("loading");
     setMsg("");
 
-    const API_URL = import.meta.env.VITE_API_URL; // 👈 AQUI
-
     try {
+      const API_URL = import.meta.env.VITE_API_URL;
+
       const res = await fetch(`${API_URL}/send`, {
-        // 👈 AQUI
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -47,142 +39,88 @@ export const Hero = () => {
 
       const data = await res.json();
 
-      if (!res.ok || data.status !== "sucesso") {
-        setStatus("error");
-        setMsg(data?.mensagem || "Não foi possível enviar. Tente novamente.");
-        return;
-      }
+      if (!res.ok) throw new Error(data?.mensagem || "Erro");
 
       setStatus("success");
-      setMsg("Enviado com sucesso! Em breve entraremos em contato.");
+      setMsg("Enviado com sucesso!");
       setForm({ nome: "", telefone: "", email: "", servico: "" });
-    } catch (err) {
-      console.error(err);
+    } catch {
       setStatus("error");
-      setMsg("Erro de conexão com o servidor.");
+      setMsg("Erro ao enviar formulário.");
     }
-    console.log("SUBMIT DISPAROU");
-    console.log("form:", form);
-    console.log("API_URL:", import.meta.env.VITE_API_URL);
   };
 
   return (
     <section id="home" className="w-full">
       <div className="relative min-h-[103vh] w-full -mt-24 overflow-hidden">
-        {/* BACKGROUND DE VÍDEO */}
         <div className="absolute inset-0 z-0 -translate-y-28">
           <img src={heroBg} className="w-full h-full object-cover object-top" />
         </div>
 
-        {/* CONTEÚDO SUPERIOR */}
-        <div className="absolute top-65 py-8 px-10 left-8 h-[24vh] rounded-xl rounded-br-xl lg:left-8 z-20 bg-white/70">
-          <h1 className="text-gray-700   text-6xl lg:text-8xl xl:text-7xl font-black mb-8">
-            Especialistas <br></br>
-            <span className="text-4xl text-gray-600"> em </span>{" "}
-            <span className="italic text-primary  ">Ortodontia</span>
-          </h1>
-
-          <div className="overflow-hidden w-full max-w-lg">
-            <div className="flex animate-scroll gap-12 whitespace-nowrap">
-              {specialties.concat(specialties).map((spec, index) => (
-                <span
-                  key={index}
-                  className="text-white font-semibold text-lg lg:text-xl"
-                >
-                  {spec}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* FAIXA DE AGENDAMENTO */}
-        <div className="absolute bottom-0  w-full bg-cleam py-18 lg:py-8 z-20">
-          <div className="max-w-7xl mx-auto px-6 flex flex-col gap-6">
-            <h2 className="text-gray-500 font-display text-2xl ">
-              <span className="text-secondary"> Agende </span> uma avaliação
+        <div className="absolute bottom-0 w-full bg-cleam py-8 z-20">
+          <div className="max-w-7xl mx-auto px-6">
+            <h2 className="text-gray-500 text-2xl mb-4">
+              <span className="text-secondary">Agende</span> uma avaliação
             </h2>
 
-            {/* FORMULÁRIO */}
             <form
               onSubmit={handleSubmit}
-              className="flex flex-wrap w-full lg:flex-nowrap gap-2 lg:gap-4 mb-10 "
+              className="flex flex-wrap lg:flex-nowrap gap-4"
             >
               <input
                 name="nome"
                 value={form.nome}
                 onChange={handleChange}
-                type="text"
                 placeholder="Nome"
-                className="flex-1 p-3 rounded-xl  border border-gray-200 outline-none focus:border-secondary text-white"
                 required
+                className="flex-1 p-3 rounded-xl border"
               />
               <input
                 name="telefone"
                 value={form.telefone}
                 onChange={handleChange}
-                type="tel"
                 placeholder="WhatsApp"
-                className="flex-1 p-3 rounded-xl  border border-slate-200 outline-none focus:border-secondary text-white"
                 required
+                className="flex-1 p-3 rounded-xl border"
               />
               <input
                 name="email"
+                type="email"
                 value={form.email}
                 onChange={handleChange}
-                type="email"
                 placeholder="E-mail"
-                className="flex-1 p-3 rounded-xl  border border-slate-200 outline-none focus:border-secondary text-white"
                 required
+                className="flex-1 p-3 rounded-xl border"
               />
               <input
                 name="servico"
                 value={form.servico}
                 onChange={handleChange}
-                type="text"
                 placeholder="Tipo de serviço"
-                className="flex-1 p-3 rounded-xl  border border-slate-200 outline-none focus:border-secondary text-white"
                 required
+                className="flex-1 p-3 rounded-xl border"
               />
+
               <Button
                 type="submit"
-                disabled={status === "loading" || status === "success"}
-                className="w-sm !py-4 rounded-xl  uppercase font-black bg-secondary text-white hover:bg-secondary/90 transition-all disabled:opacity-60"
+                disabled={status === "loading"}
+                className="px-8 py-3 rounded-xl bg-secondary text-white font-bold"
               >
-                {status === "loading"
-                  ? "Enviando..."
-                  : status === "success"
-                    ? "Enviado com sucesso!"
-                    : "Enviar"}
+                {status === "loading" ? "Enviando..." : "Enviar"}
               </Button>
             </form>
 
-            {/* FEEDBACK */}
-            {status !== "idle" && (
-              <p className="text-sm">
-                {status === "success" ? (
-                  <span className="text-green-700">{msg}</span>
-                ) : status === "error" ? (
-                  <span className="text-red-700">{msg}</span>
-                ) : null}
+            {msg && (
+              <p
+                className={`mt-3 text-sm ${
+                  status === "success" ? "text-green-700" : "text-red-700"
+                }`}
+              >
+                {msg}
               </p>
             )}
           </div>
         </div>
-
-        {/* ANIMAÇÃO DO CARROSSEL */}
-        <style>
-          {`
-            @keyframes scroll {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
-            }
-            .animate-scroll {
-              display: inline-flex;
-              animation: scroll 20s linear infinite;
-            }
-          `}
-        </style>
       </div>
     </section>
   );
