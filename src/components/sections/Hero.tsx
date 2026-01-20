@@ -35,11 +35,8 @@ export const Hero = () => {
     setStatus("loading");
     setMsg("");
 
-    const API_URL = import.meta.env.VITE_API_URL; // 👈 AQUI
-
     try {
-      const res = await fetch(`${API_URL}/send`, {
-        // 👈 AQUI
+      const res = await fetch("http://127.0.0.1:5000/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -61,9 +58,6 @@ export const Hero = () => {
       setStatus("error");
       setMsg("Erro de conexão com o servidor.");
     }
-    console.log("SUBMIT DISPAROU");
-    console.log("form:", form);
-    console.log("API_URL:", import.meta.env.VITE_API_URL);
   };
 
   return (
@@ -114,7 +108,7 @@ export const Hero = () => {
                 onChange={handleChange}
                 type="text"
                 placeholder="Nome"
-                className="flex-1 p-3 rounded-xl  border border-gray-200 outline-none focus:border-secondary text-white"
+                className="flex-1 p-3 rounded-xl  border border-slate-200 outline-none focus:border-secondary text-white"
                 required
               />
               <input
@@ -123,7 +117,7 @@ export const Hero = () => {
                 onChange={handleChange}
                 type="tel"
                 placeholder="WhatsApp"
-                className="flex-1 p-3 rounded-xl  border border-slate-200 outline-none focus:border-secondary text-white"
+                className="flex-1 p-3 rrounded-xl  border border-slate-200 outline-none focus:border-secondary text-white"
                 required
               />
               <input
@@ -147,7 +141,7 @@ export const Hero = () => {
               <Button
                 type="submit"
                 disabled={status === "loading" || status === "success"}
-                className="w-sm !py-4 rounded-xl  uppercase font-black bg-secondary text-white hover:bg-secondary/90 transition-all disabled:opacity-60"
+                className="w-sm !py-4 rounded-xl uppercase font-black bg-secondary text-white hover:bg-secondary/90 transition-all disabled:opacity-60"
               >
                 {status === "loading"
                   ? "Enviando..."
