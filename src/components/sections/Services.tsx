@@ -1,4 +1,3 @@
-import React from "react";
 import service1 from "../../assets/images/Clareamento-Dental-à-Laser-e1533923203485-1920w.webp";
 import service2 from "../../assets/images/orto.jpg";
 import service3 from "../../assets/images/clientWoman.webp";

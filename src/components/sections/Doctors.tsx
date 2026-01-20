@@ -1,4 +1,3 @@
-import React from "react";
 import perfil1 from "../../assets/images/perfilJose.webp";
 import perfil2 from "../../assets/images/perfilPaulo.webp";
 import perfil3 from "../../assets/images/KidsDentist.webp";
