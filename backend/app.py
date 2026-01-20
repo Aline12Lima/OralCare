@@ -11,6 +11,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
+# ✅ CORS CORRETO
 CORS(
     app,
     resources={
@@ -19,11 +20,12 @@ CORS(
                 "http://localhost:5173",
                 "http://127.0.0.1:5173",
                 "https://oral-care-tan.vercel.app",
-            ]
+            ],
+            "methods": ["GET", "POST", "OPTIONS"],
+            "allow_headers": ["Content-Type"],
         }
     },
 )
-
 
 # --- Supabase ---
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -44,8 +46,13 @@ if not EMAIL_USER or not EMAIL_PASS:
     raise RuntimeError("EMAIL_USER e EMAIL_PASS são obrigatórios no .env")
 
 
-@app.route("/send", methods=["POST,OPTIONS"])
+# ✅ ROTA COM OPTIONS SEPARADO
+@app.route("/send", methods=["POST", "OPTIONS"])
 def send_form():
+    # 🔹 Resposta imediata ao preflight
+    if request.method == "OPTIONS":
+        return "", 200
+
     try:
         data = request.get_json(silent=True) or {}
 
@@ -57,7 +64,7 @@ def send_form():
         if not nome or not telefone or not email or not servico:
             return jsonify({"status": "erro", "mensagem": "Dados inválidos."}), 400
 
-        # 1) Enviar e-mail
+        # 1️⃣ Enviar e-mail
         msg = MIMEMultipart()
         msg["From"] = EMAIL_USER
         msg["To"] = EMAIL_USER
@@ -76,15 +83,19 @@ def send_form():
             server.login(EMAIL_USER, EMAIL_PASS)
             server.send_message(msg)
 
-        # 2) Salvar no Supabase
+        # 2️⃣ Salvar no Supabase
         supabase.table("odontocare").insert(
-            {"Nome": nome, "Telefone": telefone, "Email": email, "Servico": servico}
+            {
+                "Nome": nome,
+                "Telefone": telefone,
+                "Email": email,
+                "Servico": servico,
+            }
         ).execute()
 
         return jsonify({"status": "sucesso", "mensagem": "Formulário enviado!"}), 200
 
     except Exception as e:
-        # Log interno (sem retornar detalhes pro usuário)
         print("Erro no backend:", repr(e))
         return (
             jsonify({"status": "erro", "mensagem": "Erro ao processar o formulário."}),
@@ -93,5 +104,4 @@ def send_form():
 
 
 if __name__ == "__main__":
-    # Em produção, não use debug=True
     app.run(debug=True)
