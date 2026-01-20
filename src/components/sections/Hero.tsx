@@ -15,6 +15,30 @@ export const Hero = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // 🔍 TESTE 2 — handleSubmit COM FETCH VISÍVEL
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    console.log("HANDLE SUBMIT ENTROU");
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL;
+      console.log("API_URL:", API_URL);
+
+      const res = await fetch(`${API_URL}/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      console.log("REQUEST FEITO", res.status);
+      alert("FETCH EXECUTADO");
+    } catch (err) {
+      console.error("ERRO FETCH:", err);
+      alert("ERRO NO FETCH");
+    }
+  };
+
   return (
     <section id="home" className="w-full">
       <div className="relative min-h-[103vh] w-full -mt-24 overflow-hidden">
@@ -30,12 +54,9 @@ export const Hero = () => {
               <span className="text-secondary">Agende</span> uma avaliação
             </h2>
 
-            {/* FORM TESTE -1 */}
+            {/* FORM — TESTE 2 */}
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("SUBMIT FUNCIONOU");
-              }}
+              onSubmit={handleSubmit}
               className="flex flex-wrap w-full lg:flex-nowrap gap-4 mb-10"
             >
               <input
