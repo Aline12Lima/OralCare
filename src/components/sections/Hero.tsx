@@ -35,8 +35,10 @@ export const Hero = () => {
     setStatus("loading");
     setMsg("");
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     try {
-      const res = await fetch("http://127.0.0.1:5000/send", {
+      const res = await fetch(`${API_URL}/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -45,9 +47,7 @@ export const Hero = () => {
       const data = await res.json();
 
       if (!res.ok || data.status !== "sucesso") {
-        setStatus("error");
-        setMsg(data?.mensagem || "Não foi possível enviar. Tente novamente.");
-        return;
+        throw new Error(data?.mensagem || "Erro ao enviar");
       }
 
       setStatus("success");
@@ -57,6 +57,8 @@ export const Hero = () => {
       console.error(err);
       setStatus("error");
       setMsg("Erro de conexão com o servidor.");
+    } finally {
+      setTimeout(() => setStatus("idle"), 3000);
     }
   };
 
