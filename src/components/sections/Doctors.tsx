@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { client, urlFor } from "../../lib/sanity"; // ajuste o caminho
-
+//forçando deploy
 type Doctor = {
   _id: string;
   name: string;
