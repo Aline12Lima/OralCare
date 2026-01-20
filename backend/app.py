@@ -12,20 +12,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # ✅ CORS CORRETO
-CORS(
-    app,
-    resources={
-        r"/*": {
-            "origins": [
-                "http://localhost:5173",
-                "http://127.0.0.1:5173",
-                "https://oral-care-tan.vercel.app",
-            ],
-            "methods": ["GET", "POST", "OPTIONS"],
-            "allow_headers": ["Content-Type"],
-        }
-    },
-)
+CORS(app)
 
 # --- Supabase ---
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -101,7 +88,3 @@ def send_form():
             jsonify({"status": "erro", "mensagem": "Erro ao processar o formulário."}),
             500,
         )
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
