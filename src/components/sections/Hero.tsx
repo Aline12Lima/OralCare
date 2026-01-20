@@ -101,8 +101,11 @@ export const Hero = () => {
 
             {/* FORMULÁRIO */}
             <form
-              onSubmit={handleSubmit}
-              className="flex flex-wrap w-full lg:flex-nowrap gap-2 lg:gap-4 mb-10 "
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert("SUBMIT FUNCIONOU");
+              }}
+              className="flex flex-wrap w-full lg:flex-nowrap gap-2 lg:gap-4 mb-10"
             >
               <input
                 name="nome"
