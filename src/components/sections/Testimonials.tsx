@@ -1,4 +1,4 @@
-import imageBg from "../../assets/images/pace.jpg";
+import imageBg from "../../assets/images/heroVideo.mp4";
 
 export const Testimonials = () => {
   const testimonials = [
@@ -23,10 +23,20 @@ export const Testimonials = () => {
   ];
 
   return (
-    <section
-      className="py-24 bg-center bg-cover bg-no-repeat relative"
-      style={{ backgroundImage: `url(${imageBg})` }}
-    >
+    <section className="relative min-h-[70vh] overflow-hidden">
+      {/* VÍDEO DE FUNDO */}
+      <video
+        src={imageBg}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      {/* OVERLAY PARA CONTRASTE */}
+      <div className="absolute inset-0 bg-black/40"></div>
+
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-primary font-bold uppercase tracking-widest text-sm mb-3">
@@ -45,7 +55,7 @@ export const Testimonials = () => {
               {testimonials.concat(testimonials).map((t, index) => (
                 <div
                   key={index}
-                  className="min-w-[320px] max-w-[320px] bg-white/10 backdrop-blur-lg p-8 rounded-3xl border border-white/20 hover:bg-white/20 transition-all"
+                  className="min-w-[320px] max-w-[320px] bg-white/10  p-8 rounded-3xl border border-white/20 hover:bg-white/20 transition-all"
                 >
                   {/* ESTRELAS */}
                   <div className="flex gap-1 mb-4">
@@ -57,14 +67,13 @@ export const Testimonials = () => {
                   </div>
 
                   {/* TEXTO */}
-                  <p className="text-gray-600 text-lg leading-relaxed mb-6 italic">
+                  <p className="text-gray-100 text-lg leading-relaxed mb-6 italic">
                     "{t.text}"
                   </p>
 
                   {/* AUTOR */}
                   <div>
-                    <p className="text-secondary font-bold">{t.name}</p>
-                    <p className="text-secondary text-sm">{t.role}</p>
+                    <p className="text-primary font-bold">{t.name}</p>
                   </div>
                 </div>
               ))}

@@ -13,27 +13,27 @@ export const Footer = () => {
           {/* LOGO / NOME */}
           <div className="text-center md:text-left text-gray-500">
             <h3 className="text-primary text-2xl">
-              Odonto <span className="text-white text-2xl">Care</span>
+              Odonto <span className="text-gray-700 text-2xl">Care</span>
             </h3>
 
-            <p className="text-sm text-white mt-2">
+            <p className="text-sm text-gray-500mt-2">
               Cuidando do seu sorriso com excelência
             </p>
 
-            <div className="mt-4 text-sm text-white/70">
+            <div className="mt-4 text-sm text-gray-500">
               Endereço: Rua Fictícia, 123 - <br /> Bairro Imaginário, São Paulo
             </div>
           </div>
 
           {/* REDES SOCIAIS */}
           <div className="text-center md:text-left">
-            <h5 className="mb-2 font-semibold">Redes Sociais</h5>
+            <h5 className="mb-2 font-semibold text-gray-500">Redes Sociais</h5>
             <div className="flex gap-4 justify-center md:justify-start">
               <a
                 href="https://www.linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-secondary transition-colors"
+                className="text-secondary hover:text-gray-700 transition-colors"
               >
                 <Linkedin size={24} />
               </a>
@@ -41,23 +41,27 @@ export const Footer = () => {
                 href="https://www.instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-secondary transition-colors"
+                className="text-secondary hover:text-gray-700 transition-colors"
               >
                 <Instagram size={24} />
               </a>
             </div>
 
             {/* BOTÃO TELEFONE */}
-            <div className="mt-4">
-              <Button onClick={() => setShowForm(true)}>
-                📞 Agendar Consulta
-              </Button>
+            <div className="mt-4 text-bege bg-secondary rounded-2xl">
+              <a
+                href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta."
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button>📞 Agendar Consulta</Button>
+              </a>
             </div>
           </div>
         </div>
 
         {/* LINHA */}
-        <div className="border-t border-white/60 mt-8 pt-6 text-center text-sm text-white">
+        <div className="border-t border-white/60 mt-8 pt-6 text-center text-sm text-gray-500">
           © {new Date().getFullYear()} Clínica Odonto. Todos os direitos
           reservados.
         </div>
