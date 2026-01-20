@@ -13,12 +13,12 @@ export const Doctors = () => {
 
   useEffect(() => {
     client
-      .fetch(
-        `*[_type == "doctor" && active == true] | order(_createdAt asc) {
-          _id, name, role, image
-        }`,
-      )
-      .then((data: Doctor[]) => setDoctors(data))
+      .fetch(`*[_type == "doctor"]{ _id, name, role, image, active }        }`)
+      .then((data) => {
+        console.log("DOCTORS from Sanity:", data);
+        setDoctors(data);
+      })
+
       .catch((err: unknown) => console.error("Sanity fetch error:", err));
   }, []);
 
