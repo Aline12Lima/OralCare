@@ -35,8 +35,11 @@ export const Hero = () => {
     setStatus("loading");
     setMsg("");
 
+    const API_URL = import.meta.env.VITE_API_URL; // 👈 AQUI
+
     try {
-      const res = await fetch("http://127.0.0.1:5000/send", {
+      const res = await fetch(`${API_URL}/send`, {
+        // 👈 AQUI
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
