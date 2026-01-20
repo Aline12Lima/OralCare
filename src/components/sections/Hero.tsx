@@ -61,6 +61,9 @@ export const Hero = () => {
       setStatus("error");
       setMsg("Erro de conexão com o servidor.");
     }
+    console.log("SUBMIT DISPAROU");
+    console.log("form:", form);
+    console.log("API_URL:", import.meta.env.VITE_API_URL);
   };
 
   return (
