@@ -1,21 +1,19 @@
 import type { ReactNode, ButtonHTMLAttributes } from "react";
 
-// Estendemos a interface nativa do HTML para aceitar 'type', 'disabled', etc.
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;
   children?: ReactNode;
   variant?: "primary" | "outline";
-  loading?: boolean; // Adicionamos a prop de carregamento
+  loading?: boolean;
 }
 
 export const Button = ({
   text,
   children,
   variant = "primary",
-  onClick,
   className = "",
-  loading,
-  ...props // Captura todas as outras props como 'type'
+  loading = false,
+  ...props
 }: ButtonProps) => {
   const baseStyles =
     "px-8 py-3 rounded-full font-extrabold cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 font-tech flex items-center justify-center min-w-[150px]";
@@ -25,15 +23,15 @@ export const Button = ({
       ? "bg-brand-accent text-slate-900 hover:brightness-110 shadow-lg shadow-brand-accent/20"
       : "border-2 border-brand-accent text-brand-accent hover:bg-brand-accent/10";
 
-  // Se estiver carregando, desativamos o botão
   const isDisabled = loading || props.disabled;
 
   return (
     <button
-      {...props} // Aqui o type="submit" é aplicado automaticamente
-      onClick={onClick}
+      {...props} // type="submit" funciona corretamente
       disabled={isDisabled}
-      className={`${baseStyles} ${variantStyles} ${className} ${isDisabled ? "opacity-70 cursor-not-allowed" : ""}`}
+      className={`${baseStyles} ${variantStyles} ${className} ${
+        isDisabled ? "opacity-70 cursor-not-allowed" : ""
+      }`}
     >
       {loading ? (
         <span className="flex items-center gap-2">

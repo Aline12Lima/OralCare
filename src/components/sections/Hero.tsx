@@ -37,16 +37,18 @@ export const Hero = () => {
         body: JSON.stringify(form),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data?.mensagem || "Erro");
+      if (!res.ok) throw new Error("Erro no request");
 
       setStatus("success");
       setMsg("Enviado com sucesso!");
       setForm({ nome: "", telefone: "", email: "", servico: "" });
-    } catch {
+    } catch (err) {
+      console.error(err);
       setStatus("error");
       setMsg("Erro ao enviar formulário.");
+    } finally {
+      // 🔴 ISSO EVITA TRAVAR
+      setTimeout(() => setStatus("idle"), 3000);
     }
   };
 
