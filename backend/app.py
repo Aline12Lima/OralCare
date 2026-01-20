@@ -10,14 +10,20 @@ from supabase import create_client, Client
 load_dotenv()
 
 app = Flask(__name__)
+
 CORS(
     app,
-    origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "https://oral-care-tan.vercel.app",
-    ],
+    resources={
+        r"/*": {
+            "origins": [
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "https://oral-care-tan.vercel.app",
+            ]
+        }
+    },
 )
+
 
 # --- Supabase ---
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -38,7 +44,7 @@ if not EMAIL_USER or not EMAIL_PASS:
     raise RuntimeError("EMAIL_USER e EMAIL_PASS são obrigatórios no .env")
 
 
-@app.route("/send", methods=["POST"])
+@app.route("/send", methods=["POST,OPTIONS"])
 def send_form():
     try:
         data = request.get_json(silent=True) or {}
