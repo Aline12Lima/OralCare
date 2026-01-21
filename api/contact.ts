@@ -45,7 +45,7 @@ export default async function handler(req: Request) {
   }
 
   try {
-    const body = (await req.json()) as Partial<LeadPayload>;
+    const body = (req.body ?? {}) as Partial<LeadPayload>;
 
     const nome = (body.nome ?? "").trim();
     const telefone = (body.telefone ?? "").trim();
