@@ -43,10 +43,7 @@ export const Hero = () => {
     console.log("HANDLE SUBMIT ENTROU");
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL;
-      console.log("API_URL:", API_URL);
-
-      const res = await fetch(`${API_URL}/send`, {
+      const res = await fetch(`/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
