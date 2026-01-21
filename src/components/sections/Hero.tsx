@@ -3,7 +3,6 @@ import { Button } from "../common/Button";
 import heroBg from "../../assets/images/heroBg.jpg";
 
 export const Hero = () => {
-  // Estado para controlar o texto do botão
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
 
   const specialties = useMemo(
@@ -33,7 +32,7 @@ export const Hero = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
+    setStatus("loading"); // Aqui o botão ativará o spinner automaticamente
 
     try {
       const res = await fetch(`/api/contact`, {
@@ -42,80 +41,48 @@ export const Hero = () => {
         body: JSON.stringify(form),
       });
 
-      if (!res.ok) {
-        // Se der erro no servidor, ele entra aqui
-        alert("Erro ao enviar para o servidor");
-        setStatus("idle");
-        return;
-      }
+      if (!res.ok) throw new Error("Erro");
 
-      // SUCESSO REAL
-      alert("Enviado com sucesso!");
       setStatus("success");
       setForm({ nome: "", telefone: "", email: "", servico: "" });
     } catch (err) {
-      // ERRO DE CONEXÃO OU ROTA NÃO ENCONTRADA (404)
-      console.error("Erro capturado:", err);
-
-      // Para o seu caso, vamos forçar a limpeza mesmo no erro para a UI funcionar
-      setStatus("success");
-      setForm({ nome: "", telefone: "", email: "", servico: "" });
-      alert("Simulação: Dados limpos (Verifique o log para o erro real)");
+      console.error(err);
+      setStatus("idle");
+      alert("Erro ao enviar");
     } finally {
-      // ESTE BLOCO SEMPRE EXECUTA (Sucesso ou Erro)
-      // Faz o botão voltar a dizer "Enviar" após 3 segundos
-      setTimeout(() => {
-        setStatus("idle");
-      }, 3000);
+      // Volta ao estado inicial após 3 segundos para o botão resetar
+      setTimeout(() => setStatus("idle"), 3000);
     }
   };
 
   return (
     <section id="home" className="w-full">
       <div className="relative min-h-[85vh] w-full -mt-24 overflow-hidden">
-        {/* BACKGROUND */}
-        <div className="absolute inset-0 z-0 ">
+        <div className="absolute inset-0 z-0">
           <img
             src={heroBg}
             alt="imagem de Fundo"
             className="w-full h-full object-cover object-center"
           />
         </div>
-
         <div className="absolute inset-0 z-10 bg-black/10" />
 
         <div className="relative z-20 max-w-7xl mx-auto px-6 pt-32 pb-40 min-h-screen flex items-center">
           <div className="max-w-2xl bg-white/40 rounded-xl p-6">
             <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-              Especializados <br />
-              em <span className="text-gray-700">Ortodontia</span>
+              Especializados <br /> em{" "}
+              <span className="text-gray-700">Ortodontia</span>
             </h1>
 
-            {/* CARROSSEL (Mantendo a lógica que funciona) */}
             <div className="mt-6 overflow-hidden whitespace-nowrap w-full">
               <style>{`
-                @keyframes marquee {
-                  0% { transform: translateX(0); }
-                  100% { transform: translateX(-50%); }
-                }
-                .carousel-container {
-                  display: flex;
-                  width: max-content;
-                  animation: marquee 20s linear infinite;
-                }
+                @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+                .carousel-container { display: flex; width: max-content; animation: marquee 20s linear infinite; }
               `}</style>
               <div className="carousel-container">
-                {specialties.map((item, i) => (
+                {specialties.concat(specialties).map((item, i) => (
                   <span
-                    key={`a-${i}`}
-                    className="text-xl sm:text-2xl font-semibold text-primary mx-8"
-                  >
-                    {item}
-                  </span>
-                ))}
-                {specialties.map((item, i) => (
-                  <span
-                    key={`b-${i}`}
+                    key={i}
                     className="text-xl sm:text-2xl font-semibold text-primary mx-8"
                   >
                     {item}
@@ -126,13 +93,11 @@ export const Hero = () => {
           </div>
         </div>
 
-        {/* FAIXA DE AGENDAMENTO */}
-        <div className="absolute  bottom-0 w-full bg-cleam py-1 z-20">
-          <div className="max-w-7xl  mx-auto px-6 flex flex-col gap-6">
+        <div className="absolute bottom-0 w-full bg-cleam py-4 z-20">
+          <div className="max-w-7xl mx-auto px-6 flex flex-col gap-6">
             <h2 className="text-gray-500 text-2xl">
               <span className="text-secondary">Agende</span> uma avaliação
             </h2>
-
             <form
               onSubmit={handleSubmit}
               className="flex flex-wrap w-full lg:flex-nowrap gap-4 mb-10"
@@ -172,14 +137,11 @@ export const Hero = () => {
               />
 
               <Button
-                className={`${status === "success" ? "bg-green-600" : "bg-primary"} text-white rounded-xl`}
-                text={
-                  status === "loading"
-                    ? "Enviando..."
-                    : status === "success"
-                      ? "Enviado com sucesso!"
-                      : "Enviar"
-                }
+                type="submit"
+                loading={status === "loading"} // Ativa o Spinner do Button.tsx
+                text={status === "success" ? "Enviado com sucesso!" : "Enviar"}
+                className={`${status === "success" ? "!bg-green-600 !text-white" : "bg-primary"} rounded-xl`}
+                disabled={status !== "idle"}
               />
             </form>
           </div>
