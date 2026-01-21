@@ -22,19 +22,25 @@ body {
         animation-play-state: paused;
     }
 }
-
-@keyframes scroll-loop {
-    0% {
+@keyframes marquee {
+    from {
         transform: translateX(0);
     }
 
-    100% {
-        /* Move exatamente metade da largura da div pai (os 4 itens originais) */
+    to {
         transform: translateX(-50%);
     }
 }
 
-/* Ajuste fino para garantir que o header fixo não oculte conteúdo se necessário */
-:target {
-    scroll-margin-top: 100px;
+/* Criamos uma classe utilitária manual */
+.animate-marquee-infinite {
+    display: flex;
+    width: max-content;
+    flex-wrap: nowrap;
+    animation: marquee 20s linear infinite;
+}
+
+/* Pausa ao passar o mouse (opcional, mas recomendado) */
+.animate-marquee-infinite:hover {
+    animation-play-state: paused;
 }

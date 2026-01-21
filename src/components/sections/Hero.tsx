@@ -1,8 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Button } from "../common/Button";
 import heroBg from "../../assets/images/heroBg.jpg";
 
 export const Hero = () => {
+  // Estado para controlar o texto do botão
+  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+
   const specialties = useMemo(
     () => [
       "Ortodontia",
@@ -15,15 +18,6 @@ export const Hero = () => {
     ],
     [],
   );
-
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % specialties.length);
-    }, 1800);
-    return () => clearInterval(id);
-  }, [specialties.length]);
 
   const [form, setForm] = useState({
     nome: "",
@@ -39,8 +33,7 @@ export const Hero = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("HANDLE SUBMIT ENTROU");
+    setStatus("loading"); // Feedback visual apenas
 
     try {
       const res = await fetch(`/api/contact`, {
@@ -49,72 +42,84 @@ export const Hero = () => {
         body: JSON.stringify(form),
       });
 
-      console.log("REQUEST FEITO", res.status);
-
+      // LÓGICA ORIGINAL MANTIDA
       if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        console.error("RES NOT OK:", res.status, text);
-        alert(`Erro ao enviar: ${res.status}`);
+        alert("Erro ao enviar");
+        setStatus("idle");
         return;
       }
 
       alert("Enviado com sucesso!");
+      setStatus("success");
       setForm({ nome: "", telefone: "", email: "", servico: "" });
-    } catch (err) {
-      console.error("ERRO FETCH:", err);
-      alert("Erro na conexão com o servidor.");
+    } catch {
+      alert("Erro na conexão");
+      setStatus("idle");
+    } finally {
+      // Reseta o botão após 3 segundos
+      setTimeout(() => setStatus("idle"), 3000);
     }
   };
 
   return (
     <section id="home" className="w-full">
-      <div className="relative min-h-[103vh] w-full -mt-24 overflow-hidden">
+      <div className="relative min-h-[85vh] w-full -mt-24 overflow-hidden">
         {/* BACKGROUND */}
-        <div className="absolute inset-0 z-0 -translate-y-28">
+        <div className="absolute inset-0 z-0 ">
           <img
             src={heroBg}
-            alt="Imagem de fundo"
-            className="w-full h-full object-cover object-top"
+            alt="imagem de Fundo"
+            className="w-full h-full object-cover object-center"
           />
         </div>
 
-        {/* Overlay (opcional, ajuda a leitura do texto) */}
         <div className="absolute inset-0 z-10 bg-black/10" />
 
-        {/* CONTEÚDO (texto + carrossel) */}
         <div className="relative z-20 max-w-7xl mx-auto px-6 pt-32 pb-40 min-h-screen flex items-center">
-          <div className="max-w-2xl">
-            <p className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-2 rounded-full text-sm font-semibold backdrop-blur">
-              Atendimento humanizado • Tecnologia moderna
-            </p>
-
+          <div className="max-w-2xl bg-white/40 rounded-xl p-6">
             <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-              Seu sorriso em boas mãos.
+              Especializados <br />
+              em <span className="text-gray-700">Ortodontia</span>
             </h1>
 
-            <p className="mt-4 text-white/90 text-base sm:text-lg">
-              Consultas e procedimentos com conforto, segurança e profissionais
-              experientes.
-            </p>
-
-            {/* Carrossel pequeno */}
-            <div className="mt-6 flex items-center gap-3">
-              <span className="text-white/80 text-sm font-semibold">
-                Especialidades:
-              </span>
-
-              <div className="h-9 overflow-hidden rounded-full bg-white/15 backdrop-blur px-4 flex items-center">
-                <span className="text-white font-bold">
-                  {specialties[index]}
-                </span>
+            {/* CARROSSEL (Mantendo a lógica que funciona) */}
+            <div className="mt-6 overflow-hidden whitespace-nowrap w-full">
+              <style>{`
+                @keyframes marquee {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-50%); }
+                }
+                .carousel-container {
+                  display: flex;
+                  width: max-content;
+                  animation: marquee 20s linear infinite;
+                }
+              `}</style>
+              <div className="carousel-container">
+                {specialties.map((item, i) => (
+                  <span
+                    key={`a-${i}`}
+                    className="text-xl sm:text-2xl font-semibold text-primary mx-8"
+                  >
+                    {item}
+                  </span>
+                ))}
+                {specialties.map((item, i) => (
+                  <span
+                    key={`b-${i}`}
+                    className="text-xl sm:text-2xl font-semibold text-primary mx-8"
+                  >
+                    {item}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
         {/* FAIXA DE AGENDAMENTO */}
-        <div className="absolute bottom-0 w-full bg-cleam py-8 z-20">
-          <div className="max-w-7xl mx-auto px-6 flex flex-col gap-6">
+        <div className="absolute  bottom-0 w-full bg-cleam py-1 z-20">
+          <div className="max-w-7xl  mx-auto px-6 flex flex-col gap-6">
             <h2 className="text-gray-500 text-2xl">
               <span className="text-secondary">Agende</span> uma avaliação
             </h2>
@@ -128,7 +133,7 @@ export const Hero = () => {
                 value={form.nome}
                 onChange={handleChange}
                 placeholder="Nome"
-                className="flex-1 p-3 rounded-xl border"
+                className="flex-1 p-3 rounded-xl border border-white bg-transparent text-white placeholder:text-gray-500"
                 required
               />
               <input
@@ -136,7 +141,7 @@ export const Hero = () => {
                 value={form.telefone}
                 onChange={handleChange}
                 placeholder="WhatsApp"
-                className="flex-1 p-3 rounded-xl border"
+                className="flex-1 p-3 rounded-xl border border-white bg-transparent text-white placeholder:text-gray-500"
                 required
               />
               <input
@@ -144,8 +149,8 @@ export const Hero = () => {
                 value={form.email}
                 onChange={handleChange}
                 placeholder="E-mail"
-                className="flex-1 p-3 rounded-xl border"
                 type="email"
+                className="flex-1 p-3 rounded-xl border border-white bg-transparent text-white placeholder:text-gray-500"
                 required
               />
               <input
@@ -153,12 +158,20 @@ export const Hero = () => {
                 value={form.servico}
                 onChange={handleChange}
                 placeholder="Tipo de serviço"
-                className="flex-1 p-3 rounded-xl border"
+                className="flex-1 p-3 rounded-xl border border-white bg-transparent text-white placeholder:text-gray-500"
                 required
               />
 
-              {/* Compatível com seu Button antigo (text/onClick) */}
-              <Button text="Enviar" />
+              <Button
+                className={`${status === "success" ? "bg-green-600" : "bg-primary"} text-white rounded-xl`}
+                text={
+                  status === "loading"
+                    ? "Enviando..."
+                    : status === "success"
+                      ? "Enviado com sucesso!"
+                      : "Enviar"
+                }
+              />
             </form>
           </div>
         </div>

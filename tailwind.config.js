@@ -5,7 +5,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {}, // Deixe vazio, pois o v4 lê do CSS
+    extend: {},
   },
   plugins: [],
-}
+};
