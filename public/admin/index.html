@@ -1,16 +1,20 @@
-<!DOCTYPE html>
-<html>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const interval = setInterval(() => {
+            const loginButton = document.querySelector("button");
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex" />
-    <title>Content Manager</title>
-</head>
+            if (loginButton && !document.getElementById("forgot-link")) {
+                const link = document.createElement("a");
+                link.id = "forgot-link";
+                link.href = "/.netlify/identity/recover";
+                link.innerText = "Esqueci minha senha";
+                link.style.display = "block";
+                link.style.marginTop = "12px";
+                link.style.textAlign = "center";
 
-<body>
-    <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-</body>
-
-</html>
+                loginButton.parentElement.appendChild(link);
+                clearInterval(interval);
+            }
+        }, 300);
+    });
+</script>
