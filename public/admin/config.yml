@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: Aline12Lima/OralCare
+  name: git-gateway
   branch: main
 
 media_folder: "content/uploads"
@@ -16,4 +15,4 @@ collections:
         fields:
           - { label: "Título", name: "title", widget: "string" }
           - { label: "Subtítulo", name: "subtitle", widget: "string" }
-          - { label: "Texto", name: "body", widget: "markdown" }
+          - { label: "Conteúdo", name: "body", widget: "markdown" }
