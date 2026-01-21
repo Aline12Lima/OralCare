@@ -1,33 +1,36 @@
 import { useEffect, useState } from "react";
 import { client, urlFor } from "../../lib/sanity";
 
+type SanityImage =
+  | { _ref: string }
+  | { asset: { _ref: string } }
+  | string
+  | Record<string, unknown>;
+
 type Doctor = {
   _id: string;
   name: string;
   role: string;
-  image: unknown;
+  image: SanityImage;
+  active?: boolean;
 };
 
 export const Doctors = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     client
       .fetch(
-        `*[_type == "doctor"] | order(_createdAt asc) {
+        `*[_type == "doctor"] | order(_createdAt asc){
           _id,
           name,
           role,
-          image
+          image,
+          active
         }`,
       )
-      .then((data: Doctor[]) => {
-        console.log("DOCTORS from Sanity:", data);
-        setDoctors(data);
-      })
-      .catch((err: unknown) => console.error("Sanity fetch error:", err))
-      .finally(() => setLoading(false));
+      .then((data) => setDoctors(data as Doctor[]))
+      .catch((err: unknown) => console.error("Sanity fetch error:", err));
   }, []);
 
   return (
@@ -42,11 +45,7 @@ export const Doctors = () => {
           </p>
         </div>
 
-        {loading ? (
-          <p className="text-center text-gray-700">
-            Carregando profissionais...
-          </p>
-        ) : doctors.length === 0 ? (
+        {doctors.length === 0 ? (
           <p className="text-center text-gray-700">
             Nenhum profissional cadastrado no momento.
           </p>

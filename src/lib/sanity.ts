@@ -1,5 +1,11 @@
 import { createClient } from "@sanity/client";
-import imageUrlBuilder from "@sanity/image-url";
+import createImageUrlBuilder from "@sanity/image-url";
+
+type SanityImageSource =
+  | { _ref: string }
+  | { asset: { _ref: string } }
+  | string
+  | Record<string, unknown>;
 
 export const client = createClient({
   projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
@@ -8,7 +14,6 @@ export const client = createClient({
   useCdn: true,
 });
 
-const builder = imageUrlBuilder(client);
+const builder = createImageUrlBuilder(client);
 
-// sem any: converte unknown para object (aceito pelo builder)
-export const urlFor = (source: unknown) => builder.image(source as object);
+export const urlFor = (source: SanityImageSource) => builder.image(source);
