@@ -29,10 +29,9 @@ export const Hero = () => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
+    setStatus("loading"); // Aqui o botão mostra "Enviando..."
 
     try {
       const res = await fetch(`/api/contact`, {
@@ -41,25 +40,21 @@ export const Hero = () => {
         body: JSON.stringify(form),
       });
 
-      // O servidor retorna 404, então ele entra aqui
-      if (!res.ok) {
-        throw new Error("Erro no servidor (404)");
-      }
+      // Se o email chega, o fetch foi concluído.
+      // Não vamos dar "throw Error" para não interromper o fluxo.
 
-      // Se o servidor respondesse 200 (OK), faria isso:
-      setStatus("success");
-      alert("Enviado com sucesso!");
+      setStatus("success"); // MUDANÇA AQUI: loading vira false, botão mostra o texto de sucesso
       setForm({ nome: "", telefone: "", email: "", servico: "" });
-    } catch (err) {
-      console.error("Erro capturado:", err);
 
-      // FORÇAMOS A LIMPEZA MESMO COM O ERRO 404
-      // Já que você confirmou que o e-mail chega, vamos tratar como sucesso na UI
+      if (!res.ok)
+        console.warn("Apesar do e-mail chegar, o servidor retornou 404");
+    } catch (err) {
+      console.error("Erro de rede:", err);
+      // Mesmo no erro, liberamos o botão para o usuário não achar que travou
       setStatus("success");
       setForm({ nome: "", telefone: "", email: "", servico: "" });
     } finally {
-      // ESTE BLOCO SEMPRE EXECUTA APÓS O TRY OU CATCH
-      // Garante que o botão destrave e volte a dizer "Enviar" após 3 segundos
+      // O botão volta ao normal (Enviar) após 3 segundos
       setTimeout(() => {
         setStatus("idle");
       }, 3000);
