@@ -1,38 +1,21 @@
-import { useEffect, useState } from "react";
-import { client, urlFor } from "../../lib/sanity";
+import perfil1 from "../../assets/images/perfilClient.webp";
+import perfil2 from "../../assets/images/perfilJose.webp";
+import perfil3 from "../../assets/images/perfilPaulo.webp";
+import perfil4 from "../../assets/images/KidsDentist.webp";
 
-type SanityImage =
-  | { _ref: string }
-  | { asset: { _ref: string } }
-  | string
-  | Record<string, unknown>;
-
-type Doctor = {
-  _id: string;
-  name: string;
-  role: string;
-  image: SanityImage;
-  active?: boolean;
-};
+const doctors = [
+  { id: "1", name: "Dra. Camila Souza", role: "Ortodontia", image: perfil1 },
+  { id: "2", name: "Dr. José Almeida", role: "Implantodontia", image: perfil2 },
+  { id: "3", name: "Dr. Paulo Lima", role: "Endodontia", image: perfil3 },
+  {
+    id: "4",
+    name: "Dra. Ana Ribeiro",
+    role: "Odontopediatria",
+    image: perfil4,
+  },
+];
 
 export const Doctors = () => {
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "doctor"] | order(_createdAt asc){
-          _id,
-          name,
-          role,
-          image,
-          active
-        }`,
-      )
-      .then((data) => setDoctors(data as Doctor[]))
-      .catch((err: unknown) => console.error("Sanity fetch error:", err));
-  }, []);
-
   return (
     <section id="especialistas" className="py-24 min-h-screen bg-bege">
       <div className="max-w-7xl mx-auto px-6">
@@ -45,43 +28,37 @@ export const Doctors = () => {
           </p>
         </div>
 
-        {doctors.length === 0 ? (
-          <p className="text-center text-gray-700">
-            Nenhum profissional cadastrado no momento.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {doctors.map((doctor) => (
-              <div
-                key={doctor._id}
-                className="group relative h-[460px] rounded-3xl overflow-hidden bg-gray-100 shadow-md hover:shadow-2xl transition-all"
-              >
-                <img
-                  src={urlFor(doctor.image).width(800).height(800).url()}
-                  alt={doctor.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {doctors.map((doctor) => (
+            <div
+              key={doctor.id}
+              className="group relative h-[460px] rounded-3xl overflow-hidden bg-gray-100 shadow-md hover:shadow-2xl transition-all"
+            >
+              <img
+                src={doctor.image}
+                alt={doctor.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"></div>
 
-                <div className="absolute bottom-0 left-0 w-full p-5">
-                  <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4">
-                    <h3 className="text-lg font-black text-gray-900">
-                      {doctor.name}
-                    </h3>
-                    <p className="text-sm font-semibold text-primary">
-                      {doctor.role}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-gray-800">
-                  Especialista
+              <div className="absolute bottom-0 left-0 w-full p-5">
+                <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4">
+                  <h3 className="text-lg font-black text-gray-900">
+                    {doctor.name}
+                  </h3>
+                  <p className="text-sm font-semibold text-primary">
+                    {doctor.role}
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+
+              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                Especialista
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
