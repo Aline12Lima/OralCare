@@ -1,4 +1,4 @@
-import matter from "gray-matter";
+import { parse } from "yaml";
 import doctorsRaw from "../../content/doctors.md?raw";
 
 type Doctor = {
@@ -7,7 +7,9 @@ type Doctor = {
   image: string;
 };
 
-const { data } = matter(doctorsRaw);
+const frontmatter = doctorsRaw.split("---").slice(1, 2).join("");
+
+const data = parse(frontmatter);
 const doctors: Doctor[] = data.doctors || [];
 
 export const Doctors = () => {
@@ -27,29 +29,16 @@ export const Doctors = () => {
           {doctors.map((doctor, index) => (
             <div
               key={index}
-              className="group relative h-[460px] rounded-3xl overflow-hidden bg-gray-100 shadow-md hover:shadow-2xl transition-all"
+              className="group relative h-[460px] rounded-3xl overflow-hidden"
             >
               <img
                 src={doctor.image}
                 alt={doctor.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover"
               />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"></div>
-
-              <div className="absolute bottom-0 left-0 w-full p-5">
-                <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4">
-                  <h3 className="text-lg font-black text-gray-900">
-                    {doctor.name}
-                  </h3>
-                  <p className="text-sm font-semibold text-primary">
-                    {doctor.role}
-                  </p>
-                </div>
-              </div>
-
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-gray-800">
-                Especialista
+              <div className="absolute bottom-0 p-4 bg-white/90">
+                <h3>{doctor.name}</h3>
+                <p>{doctor.role}</p>
               </div>
             </div>
           ))}
