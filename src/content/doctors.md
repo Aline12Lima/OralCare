@@ -1,8 +1,8 @@
 ---
 doctors:
-  - name: Dra. Camila Souza
-    role: Ortodontia
-    image: /uploads/clean.jpg
+  - name: Deu certo
+    role: amem
+    image: /uploads/orto.jpg
   - name: Dr. José Almeida
     role: Implantodontia
     image: /uploads/clean.jpg
