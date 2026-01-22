@@ -6,6 +6,7 @@ media_folder: "content/uploads"
 public_folder: "/content/uploads"
 
 collections:
+  # HOME
   - name: "pages"
     label: "Páginas"
     files:
@@ -16,3 +17,19 @@ collections:
           - { label: "Título", name: "title", widget: "string" }
           - { label: "Subtítulo", name: "subtitle", widget: "string" }
           - { label: "Conteúdo", name: "body", widget: "markdown" }
+
+  # DOCTORS
+  - name: "doctors"
+    label: "Profissionais"
+    files:
+      - file: "content/doctors.md"
+        label: "Equipe Médica"
+        name: "doctors"
+        fields:
+          - label: "Equipe"
+            name: "doctors"
+            widget: "list"
+            fields:
+              - { label: "Nome", name: "name", widget: "string" }
+              - { label: "Especialidade", name: "role", widget: "string" }
+              - { label: "Foto", name: "image", widget: "image" }

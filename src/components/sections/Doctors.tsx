@@ -1,19 +1,14 @@
-import perfil1 from "../../assets/images/perfilClient.webp";
-import perfil2 from "../../assets/images/perfilJose.webp";
-import perfil3 from "../../assets/images/perfilPaulo.webp";
-import perfil4 from "../../assets/images/KidsDentist.webp";
+import matter from "gray-matter";
+import doctorsRaw from "../../content/doctors.md?raw";
 
-const doctors = [
-  { id: "1", name: "Dra. Camila Souza", role: "Ortodontia", image: perfil1 },
-  { id: "2", name: "Dr. José Almeida", role: "Implantodontia", image: perfil2 },
-  { id: "3", name: "Dr. Paulo Lima", role: "Endodontia", image: perfil3 },
-  {
-    id: "4",
-    name: "Dra. Ana Ribeiro",
-    role: "Odontopediatria",
-    image: perfil4,
-  },
-];
+type Doctor = {
+  name: string;
+  role: string;
+  image: string;
+};
+
+const { data } = matter(doctorsRaw);
+const doctors: Doctor[] = data.doctors || [];
 
 export const Doctors = () => {
   return (
@@ -29,9 +24,9 @@ export const Doctors = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {doctors.map((doctor) => (
+          {doctors.map((doctor, index) => (
             <div
-              key={doctor.id}
+              key={index}
               className="group relative h-[460px] rounded-3xl overflow-hidden bg-gray-100 shadow-md hover:shadow-2xl transition-all"
             >
               <img
