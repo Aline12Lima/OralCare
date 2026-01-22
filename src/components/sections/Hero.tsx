@@ -35,27 +35,17 @@ export const Hero = () => {
     setStatus("loading");
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("/.netlify/functions/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      // mesmo sem ler o body, mantém o comportamento original
-      setStatus("success");
-      setForm({
-        nome: "",
-        telefone: "",
-        email: "",
-        servico: "",
-      });
-
       if (!res.ok) {
-        console.warn("Apesar do e-mail chegar, o servidor retornou erro");
+        throw new Error("Erro ao enviar formulário");
       }
-    } catch (err) {
-      console.error("Erro de rede:", err);
-      // mantém o comportamento original
+
+      // sucesso real
       setStatus("success");
       setForm({
         nome: "",
@@ -63,7 +53,13 @@ export const Hero = () => {
         email: "",
         servico: "",
       });
+    } catch (err) {
+      console.error("Erro no envio:", err);
+
+      // erro real → volta ao estado inicial
+      setStatus("idle");
     } finally {
+      // feedback visual por 3s apenas quando sucesso
       setTimeout(() => {
         setStatus("idle");
       }, 3000);
