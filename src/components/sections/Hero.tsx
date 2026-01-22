@@ -40,10 +40,13 @@ export const Hero = () => {
         body: JSON.stringify(form),
       });
 
-      // Se o email chega, o fetch foi concluído.
-      // Não vamos dar "throw Error" para não interromper o fluxo.
+      const data = await res.json(); // 🔥 ISSO FALTAVA
 
-      setStatus("success"); // MUDANÇA AQUI: loading vira false, botão mostra o texto de sucesso
+      if (!res.ok || !data.ok) {
+        throw new Error("Falha no envio");
+      }
+
+      setStatus("success");
       setForm({ nome: "", telefone: "", email: "", servico: "" });
 
       if (!res.ok)
@@ -51,8 +54,8 @@ export const Hero = () => {
     } catch (err) {
       console.error("Erro de rede:", err);
       // Mesmo no erro, liberamos o botão para o usuário não achar que travou
-      setStatus("success");
-      setForm({ nome: "", telefone: "", email: "", servico: "" });
+      setStatus("idle");
+      alert("Erro ao enviar. Tente novamente.");
     } finally {
       // O botão volta ao normal (Enviar) após 3 segundos
       setTimeout(() => {
