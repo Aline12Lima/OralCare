@@ -20,17 +20,17 @@ export const handler: Handler = async (event) => {
   try {
     const data = JSON.parse(event.body || "{}");
 
-    const { nome, telefone, email, servico } = data;
+    const { Nome, Telefone, Email, Servico } = data;
 
     // 1️⃣ Salvar no Supabase
     const { error: supabaseError } = await supabase
       .from("odontocare")
       .insert([
         {
-          nome,
-          telefone,
-          email,
-          servico,
+          Nome,
+          Telefone,
+          Email,
+          Servico,
         },
       ]);
 
@@ -46,10 +46,10 @@ export const handler: Handler = async (event) => {
       subject: "Novo contato pelo site",
       html: `
         <h2>Novo contato</h2>
-        <p><strong>Nome:</strong> ${nome}</p>
-        <p><strong>Telefone:</strong> ${telefone}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Serviço:</strong> ${servico}</p>
+        <p><strong>Nome:</strong> ${Nome}</p>
+        <p><strong>Telefone:</strong> ${Telefone}</p>
+        <p><strong>Email:</strong> ${Email}</p>
+        <p><strong>Serviço:</strong> ${Servico}</p>
       `,
     });
 
