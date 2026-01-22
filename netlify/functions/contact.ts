@@ -2,11 +2,13 @@ import type { Handler } from "@netlify/functions";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 
+// Supabase client (service role)
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// Resend client
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
 export const handler: Handler = async (event) => {
@@ -18,19 +20,30 @@ export const handler: Handler = async (event) => {
   }
 
   try {
+    // 📥 dados vindos do frontend (camelCase)
     const data = JSON.parse(event.body || "{}");
 
-    const { Nome, Telefone, Email, Servico } = data;
+    const { nome, telefone, email, servico } = data;
 
-    // 1️⃣ Salvar no Supabase
+    // 🛑 validação mínima (opcional, mas recomendada)
+    if (!nome || !telefone || !email || !servico) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Dados incompletos",
+        }),
+      };
+    }
+
+    // 1️⃣ Salvar no Supabase (colunas da tabela)
     const { error: supabaseError } = await supabase
       .from("odontocare")
       .insert([
         {
-          Nome,
-          Telefone,
-          Email,
-          Servico,
+          Nome: nome,
+          Telefone: telefone,
+          Email: email,
+          Servico: servico,
         },
       ]);
 
@@ -39,21 +52,21 @@ export const handler: Handler = async (event) => {
       throw new Error("Erro ao salvar no Supabase");
     }
 
-    // 2️⃣ Enviar e-mail
+    // 2️⃣ Enviar email
     await resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: process.env.EMAIL_TO!,
       subject: "Novo contato pelo site",
       html: `
         <h2>Novo contato</h2>
-        <p><strong>Nome:</strong> ${Nome}</p>
-        <p><strong>Telefone:</strong> ${Telefone}</p>
-        <p><strong>Email:</strong> ${Email}</p>
-        <p><strong>Serviço:</strong> ${Servico}</p>
+        <p><strong>Nome:</strong> ${nome}</p>
+        <p><strong>Telefone:</strong> ${telefone}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Serviço:</strong> ${servico}</p>
       `,
     });
 
-    // 3️⃣ Sucesso real
+    // 3️⃣ Resposta de sucesso
     return {
       statusCode: 200,
       body: JSON.stringify({
