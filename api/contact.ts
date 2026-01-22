@@ -11,17 +11,12 @@ const supabase = createClient(
 // Resend client
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
-export const handler: Handler = async (event) => {
-  if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      body: "Method Not Allowed",
-    };
-  }
+export const POST: Handler = async (request) => {
+  
 
   try {
     // 📥 dados vindos do frontend (camelCase)
-    const data = JSON.parse(event.body || "{}");
+    const data = JSON.parse(request.body || "{}");
 
     const { nome, telefone, email, servico } = data;
 
