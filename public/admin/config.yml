@@ -2,15 +2,15 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "content/uploads"
-public_folder: "/content/uploads"
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
 collections:
   # HOME
   - name: "pages"
     label: "Páginas"
     files:
-      - file: "content/home.md"
+      - file: "src/content/home.md"
         label: "Home"
         name: "home"
         fields:
@@ -22,7 +22,7 @@ collections:
   - name: "doctors"
     label: "Profissionais"
     files:
-      - file: "content/doctors.md"
+      - file: "src/content/doctors.md"
         label: "Equipe Médica"
         name: "doctors"
         fields:
