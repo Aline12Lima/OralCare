@@ -25,3 +25,5 @@ dist-ssr
 
 venv/
 .venv/
+# Local Netlify folder
+.netlify
