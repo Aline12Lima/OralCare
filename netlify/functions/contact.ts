@@ -24,7 +24,7 @@ export const handler: Handler = async (event) => {
 
     // 1️⃣ Salvar no Supabase
     const { error: supabaseError } = await supabase
-      .from("contacts")
+      .from("odontocare")
       .insert([
         {
           nome,
