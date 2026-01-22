@@ -1,20 +1,16 @@
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const interval = setInterval(() => {
-            const loginButton = document.querySelector("button");
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-            if (loginButton && !document.getElementById("forgot-link")) {
-                const link = document.createElement("a");
-                link.id = "forgot-link";
-                link.href = "/.netlify/identity/recover";
-                link.innerText = "Esqueci minha senha";
-                link.style.display = "block";
-                link.style.marginTop = "12px";
-                link.style.textAlign = "center";
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin | OralCare</title>
 
-                loginButton.parentElement.appendChild(link);
-                clearInterval(interval);
-            }
-        }, 300);
-    });
-</script>
+    <!-- Decap CMS -->
+    <script src="https://unpkg.com/decap-cms@latest/dist/decap-cms.js"></script>
+</head>
+
+<body>
+    <!-- opcional: nada aqui -->
+</body>
+
+</html>
