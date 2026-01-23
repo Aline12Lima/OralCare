@@ -36,7 +36,7 @@ export const Doctors = () => {
                 alt={doctor.name}
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute bottom-0 p-4 bg-white/90">
+              <div className="absolute w-full  bottom-0 p-4 bg-white/90">
                 <h3>{doctor.name}</h3>
                 <p>{doctor.role}</p>
               </div>

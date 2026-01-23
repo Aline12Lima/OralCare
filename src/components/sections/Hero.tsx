@@ -169,8 +169,8 @@ export const Hero = () => {
                 text={status === "success" ? "Enviado com sucesso!" : "Enviar"}
                 className={`${
                   status === "success"
-                    ? "!bg-green-600 !text-white"
-                    : "bg-primary"
+                    ? "!bg-gray-700 !text-white"
+                    : "bg-secondary text-white"
                 } rounded-xl`}
                 disabled={status !== "idle"}
               />
